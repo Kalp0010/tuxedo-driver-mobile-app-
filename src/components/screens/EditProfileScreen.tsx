@@ -8,7 +8,7 @@ import {
   FileText,
   Car,
   Settings,
-  Shield,
+  Shield, 
   Lock,
   Save,
   X,
@@ -18,15 +18,9 @@ import {
   Navigation,
   Globe,
   Apple,
-  Wifi,
-  Smartphone,
-  Droplet,
-  Baby,
-  CloudRain,
-  AlertCircle
 } from 'lucide-react';
-import { GlassCard } from '../ui/GlassCard';
-import { Button } from '../ui/Button';
+import { useNavigate } from 'react-router-dom';
+import { GlassCard, GoldButton } from '../ui/GlassCard';
 import { Input } from '../ui/Input';
 import { 
   Select, 
@@ -38,17 +32,12 @@ import {
 import { Toggle } from '../ui/Toggle';
 import { Chip } from '../ui/Chip';
 import { DocumentUpload, DocumentStatus } from '../ui/DocumentUpload';
-import { TimeInput } from '../ui/TimeInput';
 import { ImageUpload } from '../ui/ImageUpload';
 import { useNotification } from '../../contexts/NotificationContext';
+import { motion } from 'framer-motion';
 
-
-
-interface EditProfileScreenProps {
-  onBack: () => void;
-}
-
-export function EditProfileScreen({ onBack }: EditProfileScreenProps) {
+export function EditProfileScreen() {
+  const navigate = useNavigate();
   const { showSuccess } = useNotification();
   
   // Profile state
@@ -85,120 +74,123 @@ export function EditProfileScreen({ onBack }: EditProfileScreenProps) {
   const [navApp, setNavApp] = useState<'google' | 'apple' | 'waze'>('google');
   const [acceptCash, setAcceptCash] = useState(true);
   const [maxLuggage, setMaxLuggage] = useState('3');
-  const [startTime, setStartTime] = useState('06:00');
-  const [endTime, setEndTime] = useState('22:00');
   const [amenities, setAmenities] = useState(['wifi', 'charger', 'water']);
   
-  // Safety
-  const [emergencyName, setEmergencyName] = useState('Sarah Anderson');
-  const [emergencyPhone, setEmergencyPhone] = useState('555-987-6543');
-  const [medicalNotes, setMedicalNotes] = useState('');
-  
-  // Security
+  // Safety & Security
   const [biometricEnabled, setBiometricEnabled] = useState(true);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(true);
   
   const handleSave = () => {
     showSuccess('Profile Updated', 'Your changes have been saved successfully');
-    setTimeout(() => onBack(), 1000);
+    setTimeout(() => navigate(-1), 1000);
   };
   
   const handleDocumentUpload = (docType: string) => {
     showSuccess('Document Uploaded', 'Your document is being verified');
   };
-  
-  const toggleAmenity = (amenity: string) => {
-    if (amenities.includes(amenity)) {
-      setAmenities(amenities.filter(a => a !== amenity));
-    } else {
-      setAmenities([...amenities, amenity]);
-    }
-  };
 
   return (
-    <div className="min-h-full bg-black safe-area flex flex-col items-center relative">
-      {/* Header - Sticky Top */}
-      <div className="sticky top-0 z-30 w-full max-w-md glass-strong border-b border-white/10 backdrop-blur-xl">
+    <div className="min-h-full bg-black safe-area flex flex-col items-center relative overflow-x-hidden">
+      {/* Branded Responsive Header */}
+      <motion.div 
+        className="sticky top-0 z-50 w-full max-w-md glass-strong border-b border-[#D4AF37]/20 backdrop-blur-xl"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         <div className="px-6 py-4 flex items-center justify-between">
-          <button 
-            onClick={onBack}
-            className="text-[#D4AF37] hover:text-[#F7E29F] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full hover:bg-white/5"
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => navigate(-1)}
+              className="text-[#D4AF37] hover:text-[#F7E29F] transition-all min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-[#D4AF37]/5 border border-[#D4AF37]/20"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <div>
+              <h1 className="text-xl font-black text-white italic uppercase tracking-tighter leading-none">Tuxedo</h1>
+              <p className="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.3em] mt-1">Premium Driver</p>
+            </div>
+          </div>
+          <motion.div 
+            whileTap={{ scale: 0.9 }}
+            className="w-11 h-11 rounded-full border-2 border-[#D4AF37]/30 glass-strong flex items-center justify-center overflow-hidden gold-glow"
           >
-            <ArrowLeft size={24} />
-          </button>
-          <h1 className="text-xl text-white font-semibold">Edit Profile</h1>
-          <div className="w-10" />
+            <User className="text-[#D4AF37] w-5 h-5" />
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Main Content */}
-      <div className="w-full max-w-md px-6 py-6 space-y-6 pb-32">
+      <div className="w-full max-w-md px-6 py-8 space-y-8 pb-32">
         {/* Profile Header */}
-        <GlassCard variant="strong">
-          <div className="flex flex-col items-center text-center space-y-4">
+        <GlassCard variant="strong" className="border-[#D4AF37]/40 gold-glow">
+          <div className="flex flex-col items-center text-center space-y-5">
             <div className="relative">
-              <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-[#D4AF37] gold-glow">
+              <motion.div 
+                className="w-28 h-28 rounded-full overflow-hidden border-2 border-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+                whileHover={{ scale: 1.05 }}
+              >
                 <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" />
-              </div>
-              <button 
-                className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-[#D4AF37] text-black flex items-center justify-center gold-shimmer hover-lift border-2 border-black"
+              </motion.div>
+              <motion.button 
+                whileTap={{ scale: 0.9 }}
+                className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-[#D4AF37] text-black flex items-center justify-center gold-shimmer border-2 border-black shadow-lg"
               >
                 <Camera size={20} />
-              </button>
+              </motion.button>
             </div>
             <div>
-              <h2 className="text-2xl text-white mb-1">{fullName}</h2>
-              <div className="flex items-center justify-center gap-1 text-[#D4AF37]">
-                <Star size={16} className="fill-[#D4AF37]" />
-                <span>4.9</span>
-                <span className="text-gray-400 text-sm ml-1">(1,247 rides)</span>
+              <h2 className="text-2xl font-black text-white italic tracking-tight">{fullName}</h2>
+              <div className="flex items-center justify-center gap-1.5 mt-1.5">
+                <Star size={14} className="text-[#D4AF37] fill-[#D4AF37]" />
+                <span className="text-[#D4AF37] text-sm font-black tracking-widest">4.9</span>
+                <span className="text-gray-500 text-[10px] font-bold uppercase tracking-widest ml-1">(1,247 rides)</span>
               </div>
             </div>
           </div>
         </GlassCard>
 
         {/* Personal Information */}
-        <div>
-          <h3 className="text-lg text-[#D4AF37] mb-3 flex items-center gap-2">
-            <User size={20} />
-            Personal Information
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+          <h3 className="text-xs font-black text-[#D4AF37] uppercase tracking-[0.2em] mb-4 flex items-center gap-2 px-1">
+            <User size={14} className="opacity-70" />
+            Identity Protocol
           </h3>
-          <GlassCard variant="subtle" className="space-y-4">
+          <GlassCard variant="subtle" className="space-y-6 border-[#D4AF37]/10 bg-black/40">
             <Input
-              label="Full Name"
+              label="Legal Full Name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              icon={<User size={20} />}
+              icon={<User size={18} className="text-[#D4AF37]/70" />}
             />
             <Input
-              label="Phone Number"
+              label="Registry Phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               type="tel"
-              icon={<Phone size={20} />}
+              icon={<Phone size={18} className="text-[#D4AF37]/70" />}
             />
             <Input
-              label="Email"
+              label="Official Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
-              icon={<Mail size={20} />}
+              icon={<Mail size={18} className="text-[#D4AF37]/70" />}
             />
             <Input
               label="Date of Birth"
               value={dob}
               onChange={(e) => setDob(e.target.value)}
               type="date"
-              icon={<Calendar size={20} />}
+              icon={<Calendar size={18} className="text-[#D4AF37]/70" />}
             />
             
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Gender (Optional)</label>
+            <div className="space-y-2 px-1">
+              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Gender Class</label>
               <Select value={gender} onValueChange={setGender}>
-                <SelectTrigger className="w-full bg-white/5 border-white/10 text-white h-12 rounded-xl focus:ring-[#D4AF37]/50 focus:border-[#D4AF37]">
+                <SelectTrigger className="w-full bg-black/60 border-[#D4AF37]/20 text-white h-14 rounded-2xl focus:ring-[#D4AF37]/50 focus:border-[#D4AF37] transition-all">
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-900 border-[#D4AF37]/20 text-white">
+                <SelectContent className="bg-gray-900 border-[#D4AF37]/30 text-white rounded-2xl">
                   <SelectItem value="male">Male</SelectItem>
                   <SelectItem value="female">Female</SelectItem>
                   <SelectItem value="other">Other</SelectItem>
@@ -207,62 +199,62 @@ export function EditProfileScreen({ onBack }: EditProfileScreenProps) {
               </Select>
             </div>
           </GlassCard>
-        </div>
+        </motion.div>
 
         {/* KYC Information */}
-        <div>
-          <h3 className="text-lg text-[#D4AF37] mb-3 flex items-center gap-2">
-            <FileText size={20} />
-            Verification Documents
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+          <h3 className="text-xs font-black text-[#D4AF37] uppercase tracking-[0.2em] mb-4 flex items-center gap-2 px-1">
+            <FileText size={14} className="opacity-70" />
+            Registry Credentials
           </h3>
-          <GlassCard variant="subtle" className="space-y-3">
+          <GlassCard variant="subtle" className="space-y-3 border-[#D4AF37]/10 bg-black/40">
             <DocumentUpload
               label="Driver's License"
               status={documents.license}
               onUpload={() => handleDocumentUpload('license')}
-              icon={<CreditCard size={24} />}
+              icon={<CreditCard size={20} className="text-[#D4AF37]" />}
             />
             <DocumentUpload
               label="Vehicle Insurance"
               status={documents.insurance}
               onUpload={() => handleDocumentUpload('insurance')}
-              icon={<Shield size={24} />}
+              icon={<Shield size={20} className="text-[#D4AF37]" />}
             />
             <DocumentUpload
               label="Registration Certificate"
               status={documents.registration}
               onUpload={() => handleDocumentUpload('registration')}
-              icon={<FileText size={24} />}
+              icon={<FileText size={20} className="text-[#D4AF37]" />}
             />
             <DocumentUpload
               label="Background Check"
               status={documents.background}
               onUpload={() => handleDocumentUpload('background')}
-              icon={<Shield size={24} />}
+              icon={<Shield size={20} className="text-[#D4AF37]" />}
             />
             <DocumentUpload
               label="ID Proof"
               status={documents.idProof}
               onUpload={() => handleDocumentUpload('idProof')}
-              icon={<CreditCard size={24} />}
+              icon={<CreditCard size={20} className="text-[#D4AF37]" />}
             />
           </GlassCard>
-        </div>
+        </motion.div>
 
         {/* Vehicle Information */}
-        <div>
-          <h3 className="text-lg text-[#D4AF37] mb-3 flex items-center gap-2">
-            <Car size={20} />
-            Vehicle Information
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+          <h3 className="text-xs font-black text-[#D4AF37] uppercase tracking-[0.2em] mb-4 flex items-center gap-2 px-1">
+            <Car size={14} className="opacity-70" />
+            Fleet Registry
           </h3>
-          <GlassCard variant="subtle" className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Luxury Vehicle Type</label>
+          <GlassCard variant="subtle" className="space-y-6 border-[#D4AF37]/10 bg-black/40">
+            <div className="space-y-2 px-1">
+              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Luxury Vehicle Tier</label>
               <Select value={vehicleType} onValueChange={setVehicleType}>
-                <SelectTrigger className="w-full bg-white/5 border-white/10 text-white h-12 rounded-xl focus:ring-[#D4AF37]/50 focus:border-[#D4AF37]">
+                <SelectTrigger className="w-full bg-black/60 border-[#D4AF37]/20 text-white h-14 rounded-2xl focus:ring-[#D4AF37]/50 focus:border-[#D4AF37] transition-all">
                   <SelectValue placeholder="Select vehicle type" />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-900 border-[#D4AF37]/20 text-white">
+                <SelectContent className="bg-gray-900 border-[#D4AF37]/30 text-white rounded-2xl">
                   <SelectItem value="Limousine">Limousine</SelectItem>
                   <SelectItem value="Executive Sedan">Executive Sedan</SelectItem>
                   <SelectItem value="Luxury SUV">Luxury SUV</SelectItem>
@@ -273,39 +265,39 @@ export function EditProfileScreen({ onBack }: EditProfileScreenProps) {
             </div>
 
             <Input
-              label="Vehicle Make & Model"
+              label="Fleet Model Designation"
               value={vehicleMake}
               onChange={(e) => setVehicleMake(e.target.value)}
-              icon={<Car size={20} />}
+              icon={<Car size={18} className="text-[#D4AF37]/70" />}
               placeholder="e.g., Mercedes-Benz S-Class"
             />
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Year"
+                label="Registry Year"
                 value={vehicleYear}
                 onChange={(e) => setVehicleYear(e.target.value)}
                 type="number"
-                icon={<Calendar size={20} />}
+                icon={<Calendar size={18} className="text-[#D4AF37]/70" />}
               />
               <Input
-                label="Color"
+                label="Design Color"
                 value={vehicleColor}
                 onChange={(e) => setVehicleColor(e.target.value)}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="License Plate"
+                label="License ID"
                 value={licensePlate}
                 onChange={(e) => setLicensePlate(e.target.value)}
               />
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Capacity</label>
+              <div className="space-y-2 px-1">
+                <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Seat Capacity</label>
                 <Select value={capacity} onValueChange={setCapacity}>
-                  <SelectTrigger className="w-full bg-white/5 border-white/10 text-white h-12 rounded-xl focus:ring-[#D4AF37]/50 focus:border-[#D4AF37]">
+                  <SelectTrigger className="w-full bg-black/60 border-[#D4AF37]/20 text-white h-14 rounded-2xl focus:ring-[#D4AF37]/50 focus:border-[#D4AF37] transition-all">
                     <SelectValue placeholder="Capacity" />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-900 border-[#D4AF37]/20 text-white">
+                  <SelectContent className="bg-gray-900 border-[#D4AF37]/30 text-white rounded-2xl">
                     <SelectItem value="2">2 passengers</SelectItem>
                     <SelectItem value="4">4 passengers</SelectItem>
                     <SelectItem value="6">6 passengers</SelectItem>
@@ -315,8 +307,8 @@ export function EditProfileScreen({ onBack }: EditProfileScreenProps) {
               </div>
             </div>
             
-            <div>
-              <label className="block text-sm text-gray-400 mb-3">Vehicle Photos</label>
+            <div className="px-1">
+              <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 ml-1">Fleet Portfolio Images</label>
               <div className="grid grid-cols-3 gap-3">
                 <ImageUpload label="Front" imageUrl={vehiclePhotos.front} onUpload={() => {}} size="small" />
                 <ImageUpload label="Side" imageUrl={vehiclePhotos.side} onUpload={() => {}} size="small" />
@@ -324,40 +316,39 @@ export function EditProfileScreen({ onBack }: EditProfileScreenProps) {
               </div>
             </div>
           </GlassCard>
-        </div>
+        </motion.div>
 
         {/* Driver Preferences */}
-        <div>
-          <h3 className="text-lg text-[#D4AF37] mb-3 flex items-center gap-2">
-            <Settings size={20} />
-            Driver Preferences
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+          <h3 className="text-xs font-black text-[#D4AF37] uppercase tracking-[0.2em] mb-4 flex items-center gap-2 px-1">
+            <Settings size={14} className="opacity-70" />
+            Dispatch Protocols
           </h3>
-          <GlassCard variant="subtle" className="space-y-5">
-            <div>
-              <label className="block text-sm text-gray-400 mb-3">Preferred Navigation App</label>
+          <GlassCard variant="subtle" className="space-y-8 border-[#D4AF37]/10 bg-black/40">
+            <div className="px-1">
+              <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 ml-1">Navigation System</label>
               <div className="grid grid-cols-3 gap-3">
-                <Chip label="Google" selected={navApp === 'google'} onClick={() => setNavApp('google')} icon={<Globe size={16} />} />
-                <Chip label="Apple" selected={navApp === 'apple'} onClick={() => setNavApp('apple')} icon={<Apple size={16} />} />
-                <Chip label="Waze" selected={navApp === 'waze'} onClick={() => setNavApp('waze')} icon={<Navigation size={16} />} />
+                <Chip label="Google" selected={navApp === 'google'} onClick={() => setNavApp('google')} icon={<Globe size={14} />} />
+                <Chip label="Apple" selected={navApp === 'apple'} onClick={() => setNavApp('apple')} icon={<Apple size={14} />} />
+                <Chip label="Waze" selected={navApp === 'waze'} onClick={() => setNavApp('waze')} icon={<Navigation size={14} />} />
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-2 bg-white/5 p-4 rounded-2xl border border-[#D4AF37]/10">
               <div>
-                <p className="text-white">Accept Cash Rides</p>
-                <p className="text-sm text-gray-400">Allow passengers to pay with cash</p>
+                <p className="text-white font-black text-xs uppercase tracking-widest">Accept Cash Protocol</p>
+                <p className="text-[10px] text-gray-500 uppercase font-bold mt-1">Allow physical currency collection</p>
               </div>
-              {/* FIXED: Use pressed and onPressedChange for Radix/Shadcn Toggle */}
               <Toggle pressed={acceptCash} onPressedChange={setAcceptCash} />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Max Luggage Capacity</label>
+            <div className="space-y-2 px-1">
+              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Maximum Luggage Class</label>
               <Select value={maxLuggage} onValueChange={setMaxLuggage}>
-                <SelectTrigger className="w-full bg-white/5 border-white/10 text-white h-12 rounded-xl focus:ring-[#D4AF37]/50 focus:border-[#D4AF37]">
+                <SelectTrigger className="w-full bg-black/60 border-[#D4AF37]/20 text-white h-14 rounded-2xl focus:ring-[#D4AF37]/50 focus:border-[#D4AF37] transition-all">
                   <SelectValue placeholder="Select luggage" />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-900 border-[#D4AF37]/20 text-white">
+                <SelectContent className="bg-gray-900 border-[#D4AF37]/30 text-white rounded-2xl">
                   <SelectItem value="1">1 bag</SelectItem>
                   <SelectItem value="2">2 bags</SelectItem>
                   <SelectItem value="3">3 bags</SelectItem>
@@ -365,54 +356,61 @@ export function EditProfileScreen({ onBack }: EditProfileScreenProps) {
                 </SelectContent>
               </Select>
             </div>
-            
-            {/* ... other amenities chips ... */}
           </GlassCard>
-        </div>
+        </motion.div>
 
         {/* Account Security */}
-        <div>
-          <h3 className="text-lg text-[#D4AF37] mb-3 flex items-center gap-2">
-            <Lock size={20} />
-            Account Security
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+          <h3 className="text-xs font-black text-[#D4AF37] uppercase tracking-[0.2em] mb-4 flex items-center gap-2 px-1">
+            <Lock size={14} className="opacity-70" />
+            Encryption Security
           </h3>
-          <GlassCard variant="subtle" className="space-y-4">
-            <div className="flex items-center justify-between p-3 glass-card rounded-xl">
-              <div className="flex items-center gap-3">
-                <Shield size={20} className="text-[#D4AF37]" />
+          <GlassCard variant="subtle" className="space-y-4 border-[#D4AF37]/10 bg-black/40">
+            <div className="flex items-center justify-between p-4 glass-card bg-black/40 rounded-2xl border border-[#D4AF37]/10 group">
+              <div className="flex items-center gap-4">
+                <div className="p-2 rounded-lg bg-[#D4AF37]/10">
+                  <Shield size={20} className="text-[#D4AF37]" />
+                </div>
                 <div>
-                  <p className="text-white">Biometric Auth</p>
-                  <p className="text-xs text-gray-400">Face ID / Touch ID</p>
+                  <p className="text-white text-xs font-black uppercase tracking-widest">Biometric Access</p>
+                  <p className="text-[10px] text-gray-500 uppercase font-bold mt-0.5">Face ID / Touch ID Registry</p>
                 </div>
               </div>
-              {/* FIXED: Use pressed and onPressedChange */}
               <Toggle pressed={biometricEnabled} onPressedChange={setBiometricEnabled} />
             </div>
 
-            <div className="flex items-center justify-between p-3 glass-card rounded-xl">
-              <div className="flex items-center gap-3">
-                <Lock size={20} className="text-[#D4AF37]" />
+            <div className="flex items-center justify-between p-4 glass-card bg-black/40 rounded-2xl border border-[#D4AF37]/10 group">
+              <div className="flex items-center gap-4">
+                <div className="p-2 rounded-lg bg-[#D4AF37]/10">
+                  <Lock size={20} className="text-[#D4AF37]" />
+                </div>
                 <div>
-                  <p className="text-white">2FA</p>
-                  <p className="text-xs text-gray-400">Extra security layer</p>
+                  <p className="text-white text-xs font-black uppercase tracking-widest">2FA Node Security</p>
+                  <p className="text-[10px] text-gray-500 uppercase font-bold mt-0.5">Dual-Layer verification layer</p>
                 </div>
               </div>
-              {/* FIXED: Use pressed and onPressedChange */}
               <Toggle pressed={twoFactorEnabled} onPressedChange={setTwoFactorEnabled} />
             </div>
           </GlassCard>
-        </div>
+        </motion.div>
       </div>
 
       {/* Sticky Footer Actions */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 flex justify-center pointer-events-auto bg-gradient-to-t from-black via-black/80 to-transparent p-4 pb-safe">
-        <div className="w-full max-w-md grid grid-cols-2 gap-3">
-          <Button variant="secondary" onClick={onBack} icon={<X size={20} />}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} icon={<Save size={20} />}>
-            Save
-          </Button>
+      <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-auto bg-gradient-to-t from-black via-black/90 to-transparent p-6 pb-safe backdrop-blur-sm">
+        <div className="w-full max-w-md grid grid-cols-2 gap-4">
+          <GoldButton 
+            variant="secondary" 
+            onClick={() => navigate(-1)} 
+            className="border-[#D4AF37]/30 text-xs font-black uppercase tracking-widest py-6"
+          >
+            Discard
+          </GoldButton>
+          <GoldButton 
+            onClick={handleSave} 
+            className="py-6 text-xs font-black uppercase tracking-widest italic"
+          >
+            Commit Changes
+          </GoldButton>
         </div>
       </div>
     </div>

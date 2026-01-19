@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { DollarSign, TrendingUp, Calendar, Download, ArrowLeft } from 'lucide-react';
+import { DollarSign, TrendingUp, Download, ArrowLeft, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { GlassCard } from '../ui/GlassCard';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
-
-interface EarningsScreenProps {
-  onBack: () => void;
-}
+import { XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { motion } from 'framer-motion';
 
 type Period = 'daily' | 'weekly' | 'monthly' | 'yearly';
 
-export function EarningsScreen({ onBack }: EarningsScreenProps) {
+export function EarningsScreen() {
+  const navigate = useNavigate();
   const [period, setPeriod] = useState<Period>('daily');
   
   const earningsData = {
@@ -75,91 +74,132 @@ export function EarningsScreen({ onBack }: EarningsScreenProps) {
   const data = earningsData[period];
   
   return (
-    <div className="min-h-full bg-black p-6 safe-area flex flex-col items-center">
-      <div className="w-full max-w-md pt-4 pb-8">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <button 
-            onClick={onBack}
-            className="p-3 glass-card rounded-xl text-[#D4AF37] min-w-[48px] min-h-[48px] flex items-center justify-center"
-          >
-            <ArrowLeft size={24} />
-          </button>
-          <div className="flex-1">
-            <h1 className="text-3xl text-[#D4AF37]">Earnings</h1>
+    <div className="min-h-full bg-black safe-area flex flex-col items-center relative overflow-x-hidden">
+      {/* Branded Responsive Header */}
+      <motion.div 
+        className="sticky top-0 z-50 w-full max-w-md glass-strong border-b border-[#D4AF37]/20 backdrop-blur-xl"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => navigate(-1)}
+              className="text-[#D4AF37] hover:text-[#F7E29F] transition-all min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-[#D4AF37]/5 border border-[#D4AF37]/20"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <div>
+              <h1 className="text-xl font-black text-white italic uppercase tracking-tighter leading-none">Tuxedo</h1>
+              <p className="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.3em] mt-1">Premium Driver</p>
+            </div>
           </div>
-          <button className="p-3 glass-card rounded-xl text-[#D4AF37] min-w-[48px] min-h-[48px] flex items-center justify-center">
-            <Download size={24} />
-          </button>
+          <div className="flex items-center gap-3">
+            <motion.button 
+              whileTap={{ scale: 0.9 }}
+              className="p-3 glass-card rounded-xl text-[#D4AF37] border border-[#D4AF37]/20"
+            >
+              <Download size={20} />
+            </motion.button>
+            <motion.div 
+              whileTap={{ scale: 0.9 }}
+              onClick={() => navigate('/edit-profile')}
+              className="w-11 h-11 rounded-full border-2 border-[#D4AF37]/30 glass-strong flex items-center justify-center overflow-hidden gold-glow"
+            >
+              <User className="text-[#D4AF37] w-5 h-5" />
+            </motion.div>
+          </div>
         </div>
-        
+      </motion.div>
+
+      <div className="w-full max-w-md px-6 py-8 space-y-8 pb-12">
+        {/* Screen Title */}
+        <motion.div 
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-1">Revenue</h2>
+          <p className="text-[#D4AF37] font-bold uppercase tracking-[0.2em] text-[10px]">Portfolio Performance</p>
+        </motion.div>
+
         {/* Period Selector */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scroll-smooth w-full">
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide w-full no-select">
           {(['daily', 'weekly', 'monthly', 'yearly'] as Period[]).map((p) => (
-            <button
+            <motion.button
               key={p}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setPeriod(p)}
-              className={`px-6 py-3 rounded-xl whitespace-nowrap transition-all min-h-[48px] flex-shrink-0 ${
+              className={`px-6 py-3 rounded-xl whitespace-nowrap transition-all min-h-[48px] flex-shrink-0 font-black uppercase tracking-widest text-[10px] italic border-2 ${
                 period === p
-                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#F4E5A1] text-black'
-                  : 'glass-card text-gray-400'
+                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#F4E5A1] text-black border-[#D4AF37] shadow-lg shadow-[#D4AF37]/20'
+                  : 'glass-card text-gray-500 border-white/5 hover:border-[#D4AF37]/30'
               }`}
             >
-              {p.charAt(0).toUpperCase() + p.slice(1)}
-            </button>
+              {p}
+            </motion.button>
           ))}
         </div>
         
         {/* Total Earnings */}
-        <GlassCard variant="strong" className="mb-6 border-[#D4AF37]">
-          <div className="text-center">
-            <p className="text-sm text-gray-400 mb-2">Total Earnings</p>
-            <h2 className="text-5xl text-[#D4AF37] mb-4">${data.total.toFixed(2)}</h2>
+        <GlassCard variant="strong" className="mb-6 border-[#D4AF37]/50 gold-glow">
+          <div className="text-center p-2">
+            <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">Net Fleet Earnings</p>
+            <h2 className="text-5xl font-black text-white mb-8 tracking-tighter italic">
+              <span className="text-[#D4AF37]">$</span>{data.total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+            </h2>
             <div className="grid grid-cols-2 gap-4">
-              <div className="glass-card p-3 rounded-xl min-h-[70px] flex flex-col justify-center">
-                <p className="text-sm text-gray-400">Trips</p>
-                <p className="text-2xl">{data.trips}</p>
+              <div className="glass-card bg-black/40 p-5 rounded-2xl border-[#D4AF37]/10">
+                <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Completed</p>
+                <p className="text-2xl font-black text-white italic">{data.trips}</p>
               </div>
-              <div className="glass-card p-3 rounded-xl min-h-[70px] flex flex-col justify-center">
-                <p className="text-sm text-gray-400">Tips</p>
-                <p className="text-2xl text-green-400">${data.tips.toFixed(2)}</p>
+              <div className="glass-card bg-black/40 p-5 rounded-2xl border-[#D4AF37]/10">
+                <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Gratuity</p>
+                <p className="text-2xl font-black text-[#D4AF37] italic">${data.tips.toFixed(2)}</p>
               </div>
             </div>
           </div>
         </GlassCard>
         
         {/* Chart */}
-        <GlassCard className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg text-[#D4AF37]">Earnings Trend</h3>
-            <TrendingUp size={20} className="text-green-500" />
+        <GlassCard className="mb-6 border-[#D4AF37]/20 bg-black/40">
+          <div className="flex items-center justify-between mb-8 px-2">
+            <h3 className="text-xs font-black text-[#D4AF37] uppercase tracking-[0.2em] italic">Trend Analysis</h3>
+            <TrendingUp size={18} className="text-[#D4AF37] opacity-50" />
           </div>
           
-          <div className="h-64 -mx-4">
+          <div className="h-64 -mx-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data.chart}>
+              <BarChart data={data.chart} margin={{ top: 0, right: 10, left: -20, bottom: 0 }}>
                 <XAxis 
                   dataKey="time" 
-                  stroke="#666"
-                  tick={{ fill: '#999', fontSize: 12 }}
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: '#444', fontSize: 10, fontWeight: '900' }}
                 />
                 <YAxis 
-                  stroke="#666"
-                  tick={{ fill: '#999', fontSize: 12 }}
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: '#444', fontSize: 10, fontWeight: '900' }}
                 />
                 <Tooltip 
+                  cursor={{ fill: 'rgba(212, 175, 55, 0.05)' }}
                   contentStyle={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    border: '1px solid #D4AF37',
-                    borderRadius: '8px',
-                    color: '#fff'
+                    backgroundColor: 'rgba(0, 0, 0, 0.95)',
+                    border: '2px solid rgba(212, 175, 55, 0.3)',
+                    borderRadius: '16px',
+                    padding: '12px',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)'
                   }}
-                  formatter={(value: number) => [`$${value.toFixed(2)}`, 'Earnings']}
+                  itemStyle={{ color: '#D4AF37', fontWeight: '900', fontSize: '12px', textTransform: 'uppercase', fontStyle: 'italic' }}
+                  labelStyle={{ color: '#fff', marginBottom: '4px', fontWeight: '900', textTransform: 'uppercase', fontSize: '10px' }}
+                  formatter={(value: number) => [`$${value.toFixed(2)}`, 'Revenue']}
                 />
                 <Bar 
                   dataKey="earnings" 
                   fill="#D4AF37"
-                  radius={[8, 8, 0, 0]}
+                  radius={[6, 6, 2, 2]}
+                  animationDuration={1500}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -167,24 +207,24 @@ export function EarningsScreen({ onBack }: EarningsScreenProps) {
         </GlassCard>
         
         {/* Tip Summary */}
-        <GlassCard>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg text-[#D4AF37]">Tip Summary</h3>
-            <DollarSign size={20} className="text-[#D4AF37]" />
+        <GlassCard variant="subtle" className="border-[#D4AF37]/10 bg-black/40">
+          <div className="flex items-center justify-between mb-6 px-2">
+            <h3 className="text-xs font-black text-[#D4AF37] uppercase tracking-[0.2em] italic">Protocol Insights</h3>
+            <DollarSign size={18} className="text-[#D4AF37] opacity-50" />
           </div>
           
-          <div className="space-y-3">
-            <div className="flex items-center justify-between py-3 border-b border-[#D4AF37]/20">
-              <span className="text-gray-400">Total Tips</span>
-              <span className="text-lg text-green-400">${data.tips.toFixed(2)}</span>
+          <div className="space-y-1">
+            <div className="flex items-center justify-between py-5 border-b border-[#D4AF37]/10 px-2">
+              <span className="text-[10px] font-black text-gray-500 uppercase tracking-wider">Total Tips</span>
+              <span className="text-xl font-black text-[#D4AF37] italic">${data.tips.toFixed(2)}</span>
             </div>
-            <div className="flex items-center justify-between py-3 border-b border-[#D4AF37]/20">
-              <span className="text-gray-400">Avg Tip per Trip</span>
-              <span className="text-lg">${(data.tips / data.trips).toFixed(2)}</span>
+            <div className="flex items-center justify-between py-5 border-b border-[#D4AF37]/10 px-2">
+              <span className="text-[10px] font-black text-gray-500 uppercase tracking-wider">Avg Per Dispatch</span>
+              <span className="text-xl font-black text-white italic">${(data.tips / data.trips).toFixed(2)}</span>
             </div>
-            <div className="flex items-center justify-between py-3">
-              <span className="text-gray-400">Tips as % of Earnings</span>
-              <span className="text-lg text-[#D4AF37]">
+            <div className="flex items-center justify-between py-5 px-2">
+              <span className="text-[10px] font-black text-gray-500 uppercase tracking-wider">Revenue Share</span>
+              <span className="text-xl font-black text-[#D4AF37] italic">
                 {((data.tips / data.total) * 100).toFixed(1)}%
               </span>
             </div>
@@ -193,4 +233,4 @@ export function EarningsScreen({ onBack }: EarningsScreenProps) {
       </div>
     </div>
   );
-} 
+}

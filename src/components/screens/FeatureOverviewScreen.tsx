@@ -11,15 +11,16 @@ import {
   CheckCircle,
   MapPin,
   Clock,
-  Wifi
+  Zap,
+  ArrowLeft
 } from 'lucide-react';
-import { GlassCard } from '../ui/GlassCard';
+import { useNavigate } from 'react-router-dom';
+import { GlassCard, GoldButton } from '../ui/GlassCard';
+import { motion } from 'framer-motion';
 
-interface FeatureOverviewScreenProps {
-  onStart: () => void;
-}
+export function FeatureOverviewScreen() {
+  const navigate = useNavigate();
 
-export function FeatureOverviewScreen({ onStart }: FeatureOverviewScreenProps) {
   const features = [
     {
       icon: <LogIn size={32} className="text-[#D4AF37]" />,
@@ -84,108 +85,135 @@ export function FeatureOverviewScreen({ onStart }: FeatureOverviewScreenProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-black p-6 safe-area">
-      <div className="max-w-2xl mx-auto pt-8 pb-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl mb-4 bg-gradient-to-r from-[#D4AF37] to-[#F4E5A1] bg-clip-text text-transparent">
+    <div className="min-h-screen bg-black flex flex-col items-center safe-area overflow-x-hidden">
+      {/* Branded Mobile Responsive Header */}
+      <div className="w-full max-w-2xl px-6">
+        <div className="flex justify-between items-center py-6 animate-fade-in">
+          <div className="flex items-center gap-4">
+             <button 
+                onClick={() => navigate(-1)}
+                className="p-3 glass-card rounded-xl text-[#D4AF37] min-w-[48px] min-h-[48px] flex items-center justify-center border-[#D4AF37]/20 hover:border-[#D4AF37]/50 transition-all"
+              >
+                <ArrowLeft size={24} />
+              </button>
+            <div>
+                <h1 className="text-2xl font-black text-white italic uppercase tracking-tighter leading-none">Tuxedo</h1>
+                <p className="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.3em] mt-1">Premium Driver</p>
+            </div>
+          </div>
+          <motion.div 
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate('/edit-profile')}
+            className="w-12 h-12 rounded-full border-2 border-[#D4AF37]/30 glass-strong flex items-center justify-center overflow-hidden cursor-pointer gold-glow shadow-lg shadow-[#D4AF37]/20"
+          >
+            <User className="text-[#D4AF37] w-6 h-6" />
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="w-full max-w-2xl px-6 pt-4 pb-8">
+        {/* Header Title */}
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h1 className="text-5xl mb-4 gold-shimmer bg-clip-text text-transparent font-black tracking-tighter uppercase italic">
             TUXEDO DRIVER
           </h1>
-          <p className="text-xl text-gray-400 mb-2">Premium Chauffeur Platform</p>
-          <p className="text-sm text-gray-500">Black-White-Gold Glassmorphism Design</p>
-        </div>
+          <p className="text-xl text-gray-400 font-bold uppercase tracking-widest mb-2">Premium Chauffeur Platform</p>
+          <p className="text-[10px] text-[#D4AF37] font-black uppercase tracking-[0.3em]">Black-White-Gold Glassmorphism Design</p>
+        </motion.div>
 
         {/* Design System Preview */}
-        <GlassCard variant="strong" className="mb-8 border-[#D4AF37]">
-          <h3 className="text-xl text-[#D4AF37] mb-4">Design System</h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-400">Dark Theme</span>
-              <div className="w-8 h-8 rounded bg-black border border-[#D4AF37]/30" />
+        <GlassCard variant="strong" className="mb-10 border-[#D4AF37]/50 gold-glow">
+          <h3 className="text-sm font-black text-[#D4AF37] mb-6 uppercase tracking-[0.2em] italic">Architecture & Design System</h3>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="flex items-center justify-between p-3 glass-card bg-black/40 border-[#D4AF37]/10">
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Dark Core</span>
+              <div className="w-8 h-8 rounded-lg bg-black border-2 border-[#D4AF37]/30 shadow-inner" />
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-400">Gold Accent</span>
-              <div className="w-8 h-8 rounded bg-[#D4AF37]" />
+            <div className="flex items-center justify-between p-3 glass-card bg-black/40 border-[#D4AF37]/10">
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Luxury Gold</span>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#F4E5A1] shadow-lg shadow-[#D4AF37]/20" />
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-400">Glassmorphism</span>
-              <div className="w-8 h-8 rounded glass-card border border-[#D4AF37]/30" />
+            <div className="flex items-center justify-between p-3 glass-card bg-black/40 border-[#D4AF37]/10">
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Glass Layers</span>
+              <div className="w-8 h-8 rounded-lg backdrop-blur-xl bg-white/10 border border-white/20" />
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-400">Gold Glow (Online)</span>
-              <div className="w-8 h-8 rounded-full bg-[#D4AF37] gold-glow" />
+            <div className="flex items-center justify-between p-3 glass-card bg-black/40 border-[#D4AF37]/10">
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Active Glow</span>
+              <div className="w-8 h-8 rounded-full bg-[#D4AF37] status-online" />
             </div>
           </div>
         </GlassCard>
 
         {/* Features Grid */}
-        <div className="mb-8">
-          <h3 className="text-2xl text-[#D4AF37] mb-6">Complete Feature Set</h3>
+        <div className="mb-10">
+          <h3 className="text-sm font-black text-[#D4AF37] mb-8 uppercase tracking-[0.2em] italic px-2">Complete Protocol Stack</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {features.map((feature, index) => (
-              <GlassCard key={index} className="hover:border-[#D4AF37] transition-colors">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 glass-card rounded-xl flex-shrink-0">
-                    {feature.icon}
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <GlassCard className="h-full border-[#D4AF37]/10 hover:border-[#D4AF37]/40 transition-all duration-500 group">
+                  <div className="flex items-start gap-4 p-1">
+                    <div className="p-3 glass-card bg-black/40 rounded-2xl border-[#D4AF37]/20 group-hover:border-[#D4AF37]/50 transition-colors flex-shrink-0">
+                      {feature.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-base mb-1 font-bold text-white uppercase tracking-tight">{feature.title}</h4>
+                      <p className="text-xs text-gray-500 font-medium leading-relaxed">{feature.description}</p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-lg mb-1">{feature.title}</h4>
-                    <p className="text-sm text-gray-400">{feature.description}</p>
-                  </div>
-                </div>
-              </GlassCard>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </div>
 
         {/* Key Highlights */}
-        <GlassCard className="mb-8">
-          <h3 className="text-xl text-[#D4AF37] mb-4">iPhone Optimized</h3>
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <CheckCircle size={20} className="text-green-500 mt-1 flex-shrink-0" />
-              <div>
-                <p className="text-sm">Safe Area Support (Notch & Home Indicator)</p>
+        <GlassCard variant="subtle" className="mb-10 border-[#D4AF37]/20">
+          <h3 className="text-sm font-black text-[#D4AF37] mb-6 uppercase tracking-[0.2em] italic">iOS Performance Optimization</h3>
+          <div className="grid grid-cols-1 gap-4 px-2">
+            {[
+              "Safe Area Support (Notch & Home Indicator)",
+              "44pt Minimum Touch Targets (iOS HIG)",
+              "Momentum Scrolling & No Zoom on Input",
+              "Glassmorphism with Backdrop Blur",
+              "Smooth Animations & Transitions"
+            ].map((text, i) => (
+              <div key={i} className="flex items-center gap-4 group">
+                <div className="w-6 h-6 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle size={14} className="text-green-500" />
+                </div>
+                <p className="text-xs font-bold text-gray-400 group-hover:text-white transition-colors tracking-wide uppercase">{text}</p>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle size={20} className="text-green-500 mt-1 flex-shrink-0" />
-              <div>
-                <p className="text-sm">44pt Minimum Touch Targets (iOS HIG)</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle size={20} className="text-green-500 mt-1 flex-shrink-0" />
-              <div>
-                <p className="text-sm">Momentum Scrolling & No Zoom on Input</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle size={20} className="text-green-500 mt-1 flex-shrink-0" />
-              <div>
-                <p className="text-sm">Glassmorphism with Backdrop Blur</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle size={20} className="text-green-500 mt-1 flex-shrink-0" />
-              <div>
-                <p className="text-sm">Smooth Animations & Transitions</p>
-              </div>
-            </div>
+            ))}
           </div>
         </GlassCard>
 
         {/* CTA */}
-        <button
-          onClick={onStart}
-          className="w-full py-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#F4E5A1] text-black text-lg shadow-lg shadow-[#D4AF37]/30 hover:shadow-[#D4AF37]/50 transition-all min-h-[56px]"
+        <GoldButton
+          onClick={() => navigate('/')}
+          className="w-full py-6 text-xl font-black uppercase tracking-tighter italic"
         >
-          Start Demo
-        </button>
+          Start Premium Demo
+        </GoldButton>
         
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Click the ⚡ button (top-right) to jump between screens
-        </p>
+        <motion.div 
+          className="flex items-center justify-center gap-2 mt-8 opacity-60"
+          animate={{ opacity: [0.4, 0.8, 0.4] }}
+          transition={{ duration: 3, repeat: Infinity }}
+        >
+          <Zap size={14} className="text-[#D4AF37]" />
+          <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">
+            Access Demo Engine (Top-Right)
+          </p>
+        </motion.div>
       </div>
     </div>
   );
